@@ -1,8 +1,14 @@
 # LLM Duck
 
-This is a small sample setup to showcase how to use DuckDB with LM Studio to prompt LLMs wihth SQL. 
+This is a set of experiments around data analysis and augmentation using LLMs, DuckDB and other Python libraries.
 
-This is similar to the MotherDuck `prompt` method that is currently in preview: https://motherduck.com/docs/sql-reference/motherduck-sql-reference/ai-functions/prompt/
+### llm_duck.py
+
+This sample implementds a SQL UDF that is similar to the MotherDuck `prompt` method that is currently in preview: https://motherduck.com/docs/sql-reference/motherduck-sql-reference/ai-functions/prompt/
+
+### geo.py
+
+Using pandas, cartopy and matplotlib to vizualize geo tagged service call events from the NYC 311 dataset.
 
 # Requirements
 
@@ -21,15 +27,15 @@ This is similar to the MotherDuck `prompt` method that is currently in preview: 
 ```bash
 uv sync --dev
 ```
-5. Run the script with the following command:
+5. Setup the data needed for the scripts
+```bash
+uv run setup.py
+```
+6. Run the llm sql script with the following command:
 ```bash
 uv run llm_duck.py
 ```
-
-The sample setup uses the LLM model to augment the data with a Country column by letting the LLM model guess the country based on the station name.
-
-Example output:
-```
-Executing query...
-[('Netherlands', 'AMF', 'Amersfoort Centraal'), ('Netherlands', 'ASD', 'Amsterdam Centraal'), ('Netherlands', 'GERP', 'Groningen Europapark'), ('Netherlands', 'WP', 'Weesp'), ('Netherlands', 'BDG', 'Bodegraven'), ('Netherlands', 'NA', 'Nieuw Amsterdam'), ('Netherlands', 'BRN', 'Baarn'), ('Netherlands', 'NWK', 'Nieuwerkerk a/d IJssel'), ('Netherlands', 'DTCP', 'Delft Campus'), ('Germany', 'EUN', 'Unna')]
+7. Run the geo script with the following command:
+```bash
+uv run geo.py
 ```

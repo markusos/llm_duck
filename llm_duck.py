@@ -1,26 +1,12 @@
+import json
+
 import duckdb
 import requests
-import json
-import os
+from jinja2 import Template
 
 MODEL = "gemma-3-27b-it"
 MODEL_TEMP = 0.7
 MODEL_MAX_TOKENS = -1
-
-# Check if trains.parquet exists, if not, download it
-if not os.path.exists("trains.parquet"):
-    print("trains.parquet not found. Downloading...")
-    url = "http://blobs.duckdb.org/train_services.parquet"
-    try:
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
-        with open("trains.parquet", "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        print("Download complete.")
-    except requests.exceptions.RequestException as e:
-        print(f"Failed to download trains.parquet: {e}")
-        exit(1)
 
 
 # Define the UDF
@@ -52,7 +38,7 @@ def prompt(system_message, user_message):
         )
     except requests.exceptions.RequestException as e:
         # Raise an exception to ensure the query fails
-        raise RuntimeError(f"API request failed: {str(e)}")
+        raise RuntimeError(f"API request failed: {str(e)}") from e
 
 
 # Connect to DuckDB
@@ -66,39 +52,57 @@ con.create_function(
     str,  # Return type
 )
 
+parquet_file = "./data/service_requests.parquet"
+
 system_prompt = (
-    "You are an expert on the worlds train network that can guess the country of a train station.\n"
-    "Which country is the provided train station likely located in based of its station name and code.\n"
+    "You are a government auditor. You are reviewing data from New Yorks 311 system.\n"
+    "Based of a given service requests resolution description you are to determine if a reasonable action was taken to resolve the issue.\n"
     "Respond ONLY with json in this format: ```json\n"
-    '{"country": "country_name"}\n'
+    '{"reasoning": "STRING" "action_taken": "BOOLEAN"}\n'
     "```"
 )
 
-# Example usage in DuckDB
-query = f"""
-SELECT 
-    json_extract_string(
-        regexp_replace(
-            prompt(
-                '{system_prompt}',
-                'STATION NAME: ' || station_name || ', STATION CODE: ' || station_code
-            ), 
-            '```json|```', 
-            '', 
-            'g'
-        ), 
-        '$.country'
-    )::VARCHAR AS country_guess,
-    station_code,
-    station_name
-FROM (
-    SELECT DISTINCT station_code, station_name 
-    FROM "./trains.parquet" 
-    LIMIT 10
-)
+# Define the SQL query template
+query_template = """
+COPY (
+    WITH llm_reasoning AS (
+        SELECT
+            regexp_replace(
+                prompt(
+                    '{{ system_prompt }}',
+                    'RESOLUTION_DESCRIPTION: ' || resolution_description
+                ),
+                '```json|```',
+                '',
+                'g'
+            )::VARCHAR AS llm_response,
+            json_extract_string(llm_response, '$.reasoning')::VARCHAR AS reasoning,
+            json_extract_string(llm_response, '$.action_taken')::VARCHAR AS action_taken,
+            resolution_description,
+            description_count
+        FROM (
+            SELECT resolution_description, count(*) as description_count
+            FROM "{{ data_file }}"
+            GROUP BY resolution_description
+            ORDER BY description_count DESC
+            LIMIT {{ limit }}
+        )
+    )
+
+    SELECT
+        resolution_description,
+        description_count,
+        reasoning,
+        action_taken
+    FROM llm_reasoning
+) TO './output/llm_reasoning_output.csv';
 """
 
-# Execute the query
+# # Render the template with variables
+template = Template(query_template)
+query = template.render(system_prompt=system_prompt, data_file=parquet_file, limit=10)
+
+# # Execute the query
 print("Executing query...")
 print(query)
 

@@ -10,5 +10,9 @@ wheels/
 .venv
 .ruff_cache
 
-# Demo data file
-trains.parquet
+# MacOS
+.DS_Store
+
+# Data file
+data/*
+.tmp/
