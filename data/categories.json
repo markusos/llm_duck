@@ -1,0 +1,160 @@
+{
+    "categories": [
+      {
+        "category": "Public Safety & Order",
+        "subcategories": [
+          {
+            "category": "Noise & Disturbances",
+            "samples": [
+              "Residential Noise",
+              "Street/Sidewalk Noise",
+              "Commercial Noise",
+              "Vehicle Noise",
+              "Construction Noise"
+            ]
+          },
+          {
+            "category": "Parking",
+            "samples": [
+              "Illegal Parking",
+              "Blocked Driveways",
+              "Abandoned Vehicles",
+              "Derelict Vehicles/Bicycles"
+            ]
+          },
+          {
+            "category": "Homeless Assistance",
+            "samples": [
+              "Homeless Assistance",
+              "Encampments"
+            ]
+          },
+          {
+            "category": "Non-Emergency Police Matters",
+            "samples": [
+              "Drug Activity",
+              "Non-Emergency Police Matters",
+              "Illegal Fireworks",
+              "Panhandling",
+              "Drinking",
+              "Animal Abuse"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Housing & Infrastructure",
+        "subcategories": [
+          {
+            "category": "Building & Utilities",
+            "samples": [
+              "Heating/Hot Water",
+              "Plumbing",
+              "Painting/Plaster",
+              "Building Conditions",
+              "General Construction",
+              "Appliances",
+              "Electric"
+            ]
+          },
+          {
+            "category": "Street & Sidewalk Conditions",
+            "samples": [
+              "Street Lights",
+              "Street Conditions (Potholes, Cave-ins)",
+              "Sidewalk Conditions",
+              "Traffic Signals",
+              "Street Signs"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Environmental Health & Sanitation",
+        "subcategories": [
+          {
+            "category": "Waste Management & Sanitation",
+            "samples": [
+              "Sanitation Conditions",
+              "Illegal Dumping",
+              "Missed Collection",
+              "Graffiti"
+            ]
+          },
+          {
+            "category": "Animals & Pests",
+            "samples": [
+              "Rodents",
+              "Dead Animals",
+              "Animal Waste"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Consumer & Business Services",
+        "subcategories": [
+          {
+            "category": "Consumer Complaints",
+            "samples": [
+              "General Consumer Complaints",
+              "Food Establishment"
+            ]
+          },
+          {
+            "category": "Transportation Services",
+            "samples": [
+              "Taxi Complaints",
+              "For Hire Vehicle Complaints"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Government & Community Services",
+        "subcategories": [
+          {
+            "category": "Government Requests & Inquiries",
+            "samples": [
+              "Information Requests",
+              "Agency Complaints",
+              "DOF related requests",
+              "HPD related requests",
+              "OEM related requests",
+              "Literature Requests"
+            ]
+          },
+          {
+            "category": "Parks & Community",
+            "samples": [
+              "Park Maintenance",
+              "Tree Complaints",
+              "School Maintenance"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Hazardous Conditions",
+        "subcategories": [
+          {
+            "category": "Hazardous Materials & Safety",
+            "samples": [
+              "Hazardous Materials",
+              "Air Quality",
+              "Lead",
+              "Safety Violations",
+              "Asbestos"
+            ]
+          },
+          {
+            "category": "Water Quality & Leaks",
+            "samples": [
+              "Water Leaks",
+              "Water Quality"
+            ]
+          }
+        ]
+      }
+    ]
+  }

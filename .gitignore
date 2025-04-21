@@ -13,6 +13,5 @@ wheels/
 # MacOS
 .DS_Store
 
-# Data file
-data/*
+# Temorary files
 .tmp/

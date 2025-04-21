@@ -5,37 +5,51 @@ import os
 import duckdb
 
 # Load the CSV file into DuckDB
-csv_file = "./data/service_requests.csv"
+service_requests_csv_file = "./data/cityofnewyork/service_requests.csv"
+modzcta_csv_file = "./data/cityofnewyork/modzcta.csv"
 
 # Transformed files used for analysis
 # The CSV file is large, so we convert it to Parquet for faster access.
-parquet_file = "./data/service_requests.parquet"
+service_requests_parquet_file = "./data/cityofnewyork/service_requests.parquet"
 
 # The Parquet file for 2024 data
-parquet_file_2024 = "./data/service_requests_2024.parquet"
+service_requests_parquet_file_2024 = (
+    "./data/cityofnewyork/service_requests_2024.parquet"
+)
 
 # Check if service_requests.csv exists, if not, raise an error.
 # This file can be downloaded from the NYC Open Data portal.
 # https://data.cityofnewyork.us/api/views/erm2-nwe9/rows.csv
 # Note: The file is large, so it may take some time to download.
 # As of 2025-03-30, the full file is 22.78 GB.
-if not os.path.exists(csv_file):
+if not os.path.exists(service_requests_csv_file):
     raise FileNotFoundError(
-        f"The file '{csv_file}' does not exist. "
+        f"The file '{service_requests_csv_file}' does not exist. "
         "Please download it with: "
-        "wget https://data.cityofnewyork.us/api/views/erm2-nwe9/rows.csv -O {csv_file}"
+        "wget https://data.cityofnewyork.us/api/views/erm2-nwe9/rows.csv -O {service_requests_csv_file}"
+    )
+
+# Check if modzcta.csv exists, if not, raise an error.
+# This file can be downloaded from the NYC Open Data portal.
+# https://data.cityofnewyork.us/api/views/pri4-ifjk/rows.csv?accessType=DOWNLOAD
+# Note: As of 2025-03-30, the full file is 3.1 MB.
+if not os.path.exists(modzcta_csv_file):
+    raise FileNotFoundError(
+        f"The file '{modzcta_csv_file}' does not exist. "
+        "Please download it with: "
+        "wget https://data.cityofnewyork.us/api/views/pri4-ifjk/rows.csv -O {modzcta_csv_file}"
     )
 
 # Connect to DuckDB
 con = duckdb.connect(database=":memory:", read_only=False)
 
 # Create parquet file if it doesn't exist
-if not os.path.exists(parquet_file):
+if not os.path.exists(service_requests_parquet_file):
     try:
         # Execute the SQL to read CSV and write to Parquet
         # Maps the CSV columns to the appropriate data types and cleans up the haders
         con.execute(f"""
-            COPY (SELECT * FROM read_csv('{csv_file}', 
+            COPY (SELECT * FROM read_csv('{service_requests_csv_file}', 
                 header=true,
                 columns={{
                     'unique_key': 'BIGINT',
@@ -80,24 +94,28 @@ if not os.path.exists(parquet_file):
                     'longitude': 'DOUBLE',
                     'location': 'VARCHAR'
                 }})) 
-            TO "{parquet_file}" (FORMAT 'parquet');
+            TO "{service_requests_parquet_file}" (FORMAT 'parquet');
         """)
-        print(f"Exported {csv_file} to {parquet_file} successfully.")
+        print(
+            f"Exported {service_requests_csv_file} to {service_requests_parquet_file} successfully."
+        )
     except Exception as e:
         raise Exception(f"Failed to export CSV to Parquet: {e}") from e
 
 
 # Create parquet file for 2024 if it doesn't exist
-if not os.path.exists(parquet_file_2024):
+if not os.path.exists(service_requests_parquet_file_2024):
     try:
         # Execute the SQL to read CSV and write to Parquet
         con.execute(f"""
             COPY (
-                FROM "{parquet_file}"
+                FROM "{service_requests_parquet_file}"
                 WHERE created_date between '2024-01-01' and '2024-12-31'
-            ) TO "{parquet_file_2024}";
+            ) TO "{service_requests_parquet_file_2024}";
         """)
-        print(f"Exported {parquet_file} to {parquet_file_2024} successfully.")
+        print(
+            f"Exported {service_requests_parquet_file} to {service_requests_parquet_file_2024} successfully."
+        )
     except Exception as e:
         raise Exception(f"Failed to export CSV to Parquet: {e}") from e
 
