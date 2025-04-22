@@ -15,7 +15,7 @@ class MapAnimationBase(ABC):
     MAP_PADDING: float = 0.05
     ANIMATION_INTERVAL: int = 500
     ANIMATION_FPS: int = 2
-    ANIMATION_DPI: int = 150
+    ANIMATION_DPI: int = 72
 
     def __init__(
         self,
@@ -165,5 +165,8 @@ class MapAnimationBase(ABC):
 
         filename = f"./{self.output_path}/{label_filename}.gif"
         anim.save(
-            filename, writer="pillow", fps=self.ANIMATION_FPS, dpi=self.ANIMATION_DPI
+            filename,
+            writer="pillow",
+            fps=self.ANIMATION_FPS,
+            dpi=self.ANIMATION_DPI,
         )
