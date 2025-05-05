@@ -55,12 +55,12 @@ class ChoroplethMapAnimation(MapAnimationBase):
         if not len(data):
             return pd.Series(0, index=self.gdf["MODZCTA"].astype(str))
 
-        density = data.groupby("incident_zip").size().reset_index(name="count")
-        density["incident_zip"] = density["incident_zip"].astype(str)
+        density = data.groupby("MODZCTA").size().reset_index(name="count")
+        density["MODZCTA"] = density["MODZCTA"].astype(str)
 
         # Create full data series with zeros for missing ZIP codes
         full_data = pd.Series(0, index=self.gdf["MODZCTA"].astype(str))
-        full_data.update(density.set_index("incident_zip")["count"])
+        full_data.update(density.set_index("MODZCTA")["count"])
 
         # Normalize by population
         population = self.gdf.set_index("MODZCTA")["pop_est"].astype(float)

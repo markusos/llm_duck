@@ -11,6 +11,7 @@ modzcta_csv_file = "./data/cityofnewyork/modzcta.csv"
 # Transformed files used for analysis
 # The CSV file is large, so we convert it to Parquet for faster access.
 service_requests_parquet_file = "./data/cityofnewyork/service_requests.parquet"
+modzcta_parquet_file = "./data/cityofnewyork/modzcta.parquet"
 
 # The Parquet file for 2024 data
 service_requests_parquet_file_2024 = (
@@ -102,6 +103,25 @@ if not os.path.exists(service_requests_parquet_file):
     except Exception as e:
         raise Exception(f"Failed to export CSV to Parquet: {e}") from e
 
+
+if not os.path.exists(modzcta_parquet_file):
+    try:
+        # Execute the SQL to read CSV and write to Parquet
+        con.execute(f"""
+            COPY (SELECT * FROM read_csv('{modzcta_csv_file}',
+                header=true,
+                columns={{
+                    'MODZCTA': 'VARCHAR',
+                    'label': 'VARCHAR',
+                    'ZCTA': 'VARCHAR',
+                    'pop_est': 'INT64',
+                    'the_geom': 'VARCHAR',
+                }}))
+            TO "{modzcta_parquet_file}" (FORMAT 'parquet');
+        """)
+        print(f"Exported {modzcta_csv_file} to {modzcta_parquet_file} successfully.")
+    except Exception as e:
+        raise Exception(f"Failed to export CSV to Parquet: {e}") from e
 
 # Create parquet file for 2024 if it doesn't exist
 if not os.path.exists(service_requests_parquet_file_2024):

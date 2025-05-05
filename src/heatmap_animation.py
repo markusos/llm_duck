@@ -2,7 +2,6 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy.ndimage as ndimage
 
 from src.map_animation_base import MapAnimationBase
 

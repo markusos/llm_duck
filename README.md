@@ -13,7 +13,7 @@ This notebook uses pandas, cartopy, and matplotlib to visualize geo-tagged servi
 ## Data Sources
 
 * [NYC 311 Service Requests Dataset](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9/about_data)
-* [NYC Modified Zip Code Tabulation Areas (MODZCTA)](https://data.cityofnewyork.us/api/views/pri4-ifjk/rows.csv?accessType=DOWNLOAD)
+* [NYC Modified Zip Code Tabulation Areas (MODZCTA)](https://data.cityofnewyork.us/Health/Modified-Zip-Code-Tabulation-Areas-MODZCTA-/pri4-ifjk/about_data)
 
 
 ## Requirements

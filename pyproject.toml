@@ -10,18 +10,24 @@ dependencies = [
     "geopandas>=1.0.1",
     "ipykernel>=6.29.5",
     "jinja2>=3.1.6",
+    "jupysql>=0.11.1",
     "matplotlib>=3.10.1",
     "pandas>=2.2.3",
     "pip>=25.0.1",
     "pyarrow>=19.0.1",
     "requests>=2.32.3",
     "scipy>=1.15.2",
+    "toml>=0.10.2",
 ]
 
 [dependency-groups]
 dev = [
     "ruff>=0.11.2",
 ]
+
+[tool.jupysql.SqlMagic]
+feedback = true
+autopandas = true
 
 [tool.ruff.lint]
 select = [
