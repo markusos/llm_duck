@@ -15,3 +15,6 @@ wheels/
 
 # Temorary files
 .tmp/
+
+# Logs
+mcp/mcp_server.log

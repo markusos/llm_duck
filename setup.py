@@ -71,7 +71,7 @@ if not os.path.exists(service_requests_parquet_file):
                     'address_type': 'VARCHAR',
                     'city': 'VARCHAR',
                     'landmark': 'VARCHAR',
-                    'facility type': 'VARCHAR',
+                    'facility_type': 'VARCHAR',
                     'status': 'VARCHAR',
                     'due_date': 'TIMESTAMP',
                     'resolution_description': 'VARCHAR',
